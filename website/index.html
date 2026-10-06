@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trailside Birder – hear a bird, keep walking</title>
+<style>
+:root{--bg:#f6f3ea;--fg:#1c2a1e;--mut:#5b6a5c;--card:#fffdf7;--line:#ddd8c6;--acc:#2d6a3e;--acc-fg:#fff;--soft:#e5efdb;--sun:#f1b24a;--sky1:#dcebd2;--sky2:#f6f3ea;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121813;--fg:#e9eedd;--mut:#9fae9f;--card:#1a221b;--line:#2c382d;--acc:#7fcb8e;--acc-fg:#10180f;--soft:#223024;--sky1:#1d2b1f;--sky2:#121813}}
+:root[data-theme="dark"]{--bg:#121813;--fg:#e9eedd;--mut:#9fae9f;--card:#1a221b;--line:#2c382d;--acc:#7fcb8e;--acc-fg:#10180f;--soft:#223024;--sky1:#1d2b1f;--sky2:#121813}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,"Times New Roman",serif}
+a{color:var(--acc)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{max-width:1000px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:system-ui,sans-serif}
+.logo{font-weight:700;text-decoration:none;color:var(--fg)}
+.links{display:flex;gap:18px;font-size:.92rem;overflow-x:auto}
+.links a{color:var(--mut);text-decoration:none;white-space:nowrap}
+.links a:hover{color:var(--acc)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+.hero{background:linear-gradient(var(--sky1),var(--sky2));padding:56px 0 20px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
+.eyebrow{font:600 .78rem system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+h1{font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.08;margin:.3em 0 .4em;letter-spacing:-.01em}
+.lead{font-size:1.2rem;color:var(--mut);max-width:34ch}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn{font:600 .95rem system-ui,sans-serif;padding:12px 20px;border-radius:99px;text-decoration:none;border:1px solid var(--acc);cursor:pointer}
+.btn.p{background:var(--acc);color:var(--acc-fg)}
+.btn.s{background:transparent;color:var(--acc)}
+.hero svg{width:100%;height:auto;max-height:340px}
+section{padding:64px 0}
+section.alt{background:var(--soft)}
+h2{font-size:clamp(1.6rem,3.5vw,2.2rem);margin:0 0 .3em;line-height:1.15}
+.sub{color:var(--mut);max-width:56ch;margin:0 0 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.card .ic{font-size:1.7rem}
+.card h3{font:700 1.02rem system-ui,sans-serif;margin:8px 0 4px}
+.card p{margin:0;font-size:.95rem;color:var(--mut);line-height:1.55}
+.num{font:700 .8rem system-ui,sans-serif;color:var(--acc);letter-spacing:.1em}
+.demo{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+input,select,textarea{font:inherit;font-family:system-ui,sans-serif;font-size:.95rem;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);flex:1;min-width:140px}
+button{font:600 .92rem system-ui,sans-serif;padding:10px 18px;border-radius:99px;border:0;background:var(--acc);color:var(--acc-fg);cursor:pointer}
+button.g{background:transparent;color:var(--mut);border:1px solid var(--line)}
+.stat{display:inline-block;background:var(--soft);color:var(--acc);border-radius:99px;padding:3px 12px;font:600 .82rem system-ui,sans-serif;margin:8px 0}
+.bird{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:12px 0;font-family:system-ui,sans-serif}
+.bird small{display:block;color:var(--mut)}
+.empty{color:var(--mut);font-style:italic;padding:10px 0}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-family:system-ui,sans-serif;font-size:.95rem;background:var(--card);border-radius:14px;overflow:hidden}
+th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}
+td.y{color:var(--acc);font-weight:600}
+td.n{color:var(--mut)}
+.note{margin-top:18px;font-size:.9rem;color:var(--mut);font-family:system-ui,sans-serif;border-left:3px solid var(--sun);padding-left:12px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+footer{padding:36px 0 48px;color:var(--mut);font:.9rem system-ui,sans-serif;border-top:1px solid var(--line)}
+@media (max-width:760px){.hero .wrap,.split{grid-template-columns:1fr}.links{display:none}.hero{padding-top:36px}}
+</style>
+</head>
+<body>
+<nav><div class="nav"><a class="logo" href="#top">🐦 Trailside Birder</a>
+<div class="links"><a href="#how">How it works</a><a href="#open">Why open</a><a href="#journal">Field journal</a><a href="#compare">Compare</a><a href="#run">Run it</a><a href="#field">Field notes</a></div></div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+<div>
+<div class="eyebrow">Open-weight AI · Touch Grass</div>
+<h1>Hear a bird. Keep walking.</h1>
+<p class="lead">An offline bird-call companion that tells you what you're hearing, then lets you put the phone away.</p>
+<div class="btns"><a class="btn p" href="#how">See how it works</a><a class="btn s" href="#journal">Try the field journal</a></div>
+</div>
+<svg viewBox="0 0 400 300" role="img" aria-label="Illustration of a songbird on a branch at sunrise">
+<circle cx="300" cy="90" r="46" fill="var(--sun)" opacity=".85"/>
+<path d="M0 250 Q100 215 200 240 T400 225 V300 H0Z" fill="var(--acc)" opacity=".25"/>
+<path d="M0 275 Q120 245 220 265 T400 255 V300 H0Z" fill="var(--acc)" opacity=".45"/>
+<path d="M20 170 Q150 150 300 165" stroke="#7a5a3a" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M270 160 q22 -26 40 -4" stroke="#7a5a3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+<g transform="translate(150 98)"><ellipse cx="42" cy="44" rx="40" ry="28" fill="#8a5a3c"/><circle cx="82" cy="26" r="18" fill="#8a5a3c"/>
+<path d="M98 24 l18 5 -18 6z" fill="#e8a63a"/><circle cx="88" cy="22" r="3" fill="#1c2a1e"/>
+<path d="M4 50 L-22 66 L8 58z" fill="#6e4630"/><ellipse cx="44" cy="52" rx="26" ry="16" fill="#efe1c6"/>
+<path d="M30 36 q18 -14 36 0 q-18 14 -36 0z" fill="#6e4630"/>
+<path d="M50 72 v14 M62 70 v16" stroke="#c9873a" stroke-width="3"/></g>
+<g stroke="var(--acc)" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"><path d="M290 110 q10 8 0 16"/><path d="M302 102 q16 16 0 32"/></g>
+</svg>
+</div></header>
+
+<section id="how"><div class="wrap">
+<h2>Four steps. One of them is a screen.</h2>
+<p class="sub">Everything happens on the device in your pocket. The only moment you look at a display is back at home.</p>
+<div class="grid">
+<div class="card"><div class="num">01</div><div class="ic">🎙️</div><h3>Listen</h3><p>Tap once to record a few seconds of birdsong, then pocket the phone.</p></div>
+<div class="card"><div class="num">02</div><div class="ic">🧠</div><h3>Identify</h3><p>An open bird-sound model matches the call to a species with a confidence score.</p></div>
+<div class="card"><div class="num">03</div><div class="ic">🗣️</div><h3>Explain</h3><p>A small local language model gives you a short, spoken note in your chosen voice: kid, expert, or field journal.</p></div>
+<div class="card"><div class="num">04</div><div class="ic">📖</div><h3>Remember</h3><p>Every sighting joins your life list, ready to browse over tea when you get home.</p></div>
+</div></div></section>
+
+<section class="alt" id="open"><div class="wrap">
+<h2>Why open-source AI?</h2>
+<p class="sub">The best birding is where the signal isn't. Open models make that possible.</p>
+<div class="grid">
+<div class="card"><div class="ic">📡</div><h3>Works with no signal</h3><p>Canyons, ridgelines and forest trails don't have coverage. Nothing here needs it.</p></div>
+<div class="card"><div class="ic">🔒</div><h3>Your data stays yours</h3><p>Recordings and locations never leave the device, which matters for sensitive nesting sites.</p></div>
+<div class="card"><div class="ic">🎛️</div><h3>Swap and tune</h3><p>Change the model, the personality or the regional species list without asking a vendor.</p></div>
+<div class="card"><div class="ic">🌱</div><h3>Free to run</h3><p>No per-request billing, so you can take it on every walk of the year.</p></div>
+</div></div></section>
+
+<section id="journal"><div class="wrap">
+<h2>Your field journal</h2>
+<p class="sub">The "at home" half of the experience. Log what you heard; it's saved only in this browser.</p>
+<div class="demo">
+<div class="row"><input id="sp" placeholder="Species (e.g. Hermit Thrush)"><input id="conf" type="number" min="0" max="100" placeholder="Confidence %" style="max-width:150px"></div>
+<div class="row"><input id="loc" placeholder="Where (trail or park)"><select id="voice"><option value="Field journal">Field journal voice</option><option value="Kid-friendly">Kid-friendly voice</option><option value="Expert">Expert voice</option></select></div>
+<div class="row"><textarea id="txt" rows="2" placeholder="What did you notice?"></textarea></div>
+<div class="row"><button id="add">Add sighting</button><button class="g" id="clr">Clear all</button></div>
+<div class="stat" id="count">0 species</div>
+<div id="list"></div>
+</div></div></section>
+
+<section class="alt" id="compare"><div class="wrap">
+<h2>Open vs. cloud, on the trail</h2>
+<p class="sub">Same idea, built two ways.</p>
+<div class="scroll"><table>
+<tr><th>On the trail</th><th>Trailside Birder (open)</th><th>Cloud API version</th></tr>
+<tr><td>No signal</td><td class="y">Works</td><td class="n">Stops</td></tr>
+<tr><td>Recordings and location</td><td class="y">Stay on device</td><td class="n">Sent to a server</td></tr>
+<tr><td>Cost per walk</td><td class="y">Battery only</td><td class="n">Billed per request</td></tr>
+<tr><td>Change voice or model</td><td class="y">Anytime</td><td class="n">Vendor's choice</td></tr>
+</table></div>
+<p class="note">Licensing: the BirdNET model weights are CC BY-NC-SA, so this project is for non-commercial use.</p>
+</div></section>
+
+<section id="run"><div class="wrap">
+<h2>Run it yourself</h2>
+<p class="sub">Everything it uses is free and open.</p>
+<div class="split">
+<div class="card"><h3>What you need</h3><p>A laptop, or a Raspberry Pi 5 for the pocket version, plus a microphone. <a href="https://ollama.com">Ollama</a> runs the language model and <a href="https://github.com/kahst/BirdNET-Analyzer">BirdNET</a> listens for birds.</p></div>
+<div class="card"><h3>Pick your voice</h3><p>Small models like Gemma, Qwen or Llama run comfortably on modest hardware. Swap one for another and the whole personality changes.</p></div>
+</div></div></section>
+
+<section class="alt" id="field"><div class="wrap">
+<h2>Field notes</h2>
+<p class="sub">The real test is outside. These are the numbers I'm tracking on the walk.</p>
+<div class="grid">
+<div class="card"><div class="ic">⏱️</div><h3>Speed</h3><p>Seconds from recording to answer, with no network.</p></div>
+<div class="card"><div class="ic">🎯</div><h3>Accuracy</h3><p>Calls identified correctly versus ones I could confirm by sight.</p></div>
+<div class="card"><div class="ic">🔋</div><h3>Battery</h3><p>How much power a one-hour walk really uses.</p></div>
+<div class="card"><div class="ic">📵</div><h3>Screen time</h3><p>Total minutes looking at the display while outdoors.</p></div>
+</div></div></section>
+
+<footer><div class="wrap">Built for the Touch Grass open-source AI challenge. Bird identification by BirdNET; narration by a local open-weight language model.</div></footer>
+
+<script>
+(function(){
+var K="trailside-birder-v1",list=document.getElementById("list"),data=[];
+function load(){try{data=JSON.parse(localStorage.getItem(K))||[]}catch(e){data=[]}}
+function save(){try{localStorage.setItem(K,JSON.stringify(data))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function render(){
+ var u={};data.forEach(function(d){u[d.sp.toLowerCase()]=1});
+ document.getElementById("count").textContent=Object.keys(u).length+" species · "+data.length+" sightings";
+ list.innerHTML=data.length?data.slice().reverse().map(function(d){
+  return '<div class="bird"><div><b>'+esc(d.sp)+'</b>'+(d.conf?' · '+esc(d.conf)+'%':'')+
+  '<small>'+esc(d.date)+(d.loc?' · '+esc(d.loc):'')+' · '+esc(d.voice)+'</small>'+(d.txt?'<div>'+esc(d.txt)+'</div>':'')+'</div></div>'}).join(""):'<div class="empty">No sightings yet. Your first bird goes here.</div>';
+}
+document.getElementById("add").onclick=function(){
+ var sp=document.getElementById("sp").value.trim();if(!sp)return;
+ data.push({sp:sp,conf:document.getElementById("conf").value,loc:document.getElementById("loc").value.trim(),voice:document.getElementById("voice").value,txt:document.getElementById("txt").value.trim(),date:new Date().toLocaleDateString()});
+ save();render();["sp","conf","txt"].forEach(function(i){document.getElementById(i).value=""});
+};
+document.getElementById("clr").onclick=function(){if(confirm("Clear all sightings?")){data=[];save();render()}};
+load();render();
+})();
+</script>
+</body>
+</html>

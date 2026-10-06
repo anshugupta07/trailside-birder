@@ -1,0 +1,4 @@
+birdnet-analyzer
+requests
+sounddevice
+soundfile
